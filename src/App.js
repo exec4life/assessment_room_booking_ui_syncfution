@@ -46,6 +46,7 @@ class App extends React.Component {
     this.onEditSchedulePopupClose = this.onEditSchedulePopupClose.bind(this);
     this.onScheduleActionComplete = this.onScheduleActionComplete.bind(this);
     this.onScheduleActionFailure = this.onScheduleActionFailure.bind(this);
+    this.onRoomListBoxActionComplete = this.onRoomListBoxActionComplete.bind(this);
   }
   
   onRoomListBoxChange(args) {
@@ -60,13 +61,28 @@ class App extends React.Component {
     }
 
     // In case just only 1 room is selectd
-    if (slectedRoom === 0 && args.value.length === 1) {
+    if (slectedRoom === 0 && args.value.length > 0) {
       slectedRoom = args.value[0];
     }
 
     this.setState({ 
       roomIds: args.value,
       slectedRoom: slectedRoom
+    }, () => {});
+  }
+
+  onRoomListBoxActionComplete(args) {
+    let selectedRooms = args.result.map(e => e.Id);
+    this.roomlistBoxObj.current.value = selectedRooms;
+
+    let selectedOneRoom = 0;
+    if (selectedRooms.length > 0) {
+      selectedOneRoom = selectedRooms[0];
+    }
+
+    this.setState({ 
+      roomIds: selectedRooms,
+      slectedRoom: selectedOneRoom
     }, () => {});
   }
   
@@ -195,6 +211,7 @@ class App extends React.Component {
           fields={{text: "Name", value: "Id", Color: "Color"}}
           selectionSettings= {{ selectAll: true }}
           change={this.onRoomListBoxChange} 
+          actionComplete = {this.onRoomListBoxActionComplete}
           itemTemplate='<div class="list-wrapper" style="background-color: ${Color}"><span class="text">${Name}</span>'/>
       </div>
       <div>
