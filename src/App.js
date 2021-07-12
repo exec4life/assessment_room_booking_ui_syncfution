@@ -30,8 +30,8 @@ class App extends React.Component {
     });
     
     this.scheduleDataManager = new DataManager({
-      url: 'http://localhost:8000/api/booking/list',
-      crudUrl: 'http://localhost:8000/api/booking/syncfusion',
+      url: 'http://localhost:8000/api/schedule/list',
+      crudUrl: 'http://localhost:8000/api/schedule/syncfusion',
       adaptor: new UrlAdaptor()
     });
 
@@ -113,7 +113,7 @@ class App extends React.Component {
     if (args.type === 'Editor') { 
       // Force open RecurrenceEditor form
       let recurrenceElm = document.querySelector('.e-recurrenceeditor');
-      if (recurrenceElm != undefined) {
+      if (recurrenceElm !== undefined) {
         recurrenceElm.classList.remove('e-disable');
       }
 
@@ -161,7 +161,7 @@ class App extends React.Component {
     let msg = 'The error is occurred';
     try { // View error message of any schedule action errors
       let json = JSON.parse(args.error[0].error.response);
-      if (json.messages != undefined && json.messages.length > 0) {
+      if (json.messages !== undefined && json.messages.length > 0) {
         msg = json.messages.join('; ');
       } else {
         msg = json.message;
@@ -201,7 +201,6 @@ class App extends React.Component {
         <ScheduleComponent ref={this.scheduleObj}
               eventSettings={{dataSource: this.scheduleDataManager, 
                 query: new Query().addParams('RoomIds', this.state.roomIds)
-                  .addParams('UserId', this.state.userId)
                   .addParams('RequestType', this.state.requestType), 
                 enableTooltip: true}} 
               selectedDate={new Date()} currentView='WorkWeek'
